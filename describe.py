@@ -1,27 +1,27 @@
 import sys
-import pandas as pd
 import numpy as np
+from data_treatment_class import Data_treatment
 
 
-def get_numeric_data(data, features):
-    col = 0
-    while col < data.shape[1]:
-        if isinstance(data[0][col], str):
-            data = np.delete(data, col, 1)
-            del features[col]
-            col -= 1
-        col += 1
-    return data, features
+# def get_numeric_data(data, features):
+#     col = 0
+#     while col < data.shape[1]:
+#         if isinstance(data[0][col], str):
+#             data = np.delete(data, col, 1)
+#             del features[col]
+#             col -= 1
+#         col += 1
+#     return data, features
 
-def clean_data(data):
-    for col in range(data.shape[1]):
-        row = 0
-        while row < data.shape[0]:
-            if np.isnan(data[row][col]):
-                data = np.delete(data, row, axis=0)
-                row -= 1
-            row += 1
-    return data
+# def clean_data(data):
+#     for col in range(data.shape[1]):
+#         row = 0
+#         while row < data.shape[0]:
+#             if np.isnan(data[row][col]):
+#                 data = np.delete(data, row, axis=0)
+#                 row -= 1
+#             row += 1
+#     return data
 
 def count_func(summary, data):
     summary['count'] = {}
@@ -82,30 +82,12 @@ def print_func(summary, features):
 
 if __name__ == "__main__":
     file = sys.argv[1]
-    data_brut = pd.read_csv(file)
-    data = data_brut.to_numpy()[:,1:]
-
-    columns = data_brut.columns[1:]
-    features = []
-    for column in columns:
-        features.append(column)
-
-    data, features = get_numeric_data(data, features)
-    data = clean_data(data)
+    df = Data_treatment(file)
 
     summary = {}
-    summary = count_func(summary, data)
-    summary = mean_func(summary, data)
-    summary = std_func(summary, data)
-    summary = quartile_func(summary, data)
-    print_func(summary, features)
+    summary = count_func(summary, df.normalize_data)
+    summary = mean_func(summary, df.normalize_data)
+    summary = std_func(summary, df.normalize_data)
+    summary = quartile_func(summary, df.normalize_data)
+    print_func(summary, df.num_features)
     # print(summary)
-
-# count 
-# mean
-# std sqrt(mean(abs(x - x.mean())**2))
-# min 
-# 25%
-# 50%
-# 75%
-# max
