@@ -6,9 +6,6 @@ from data_treatment_class import Data_treatment
 
 # from describe import get_numeric_data, clean_data
 
-
-
-
 def get_numeric_data_by_house(datas, features, houses):
     col = 1
     while col < datas.shape[1]:
@@ -35,10 +32,7 @@ def get_numeric_data_by_house(datas, features, houses):
         datas[house] = data
     return datas, features
 
-if __name__ == "__main__":
-    file = sys.argv[1]
-    df = Data_treatment(file)
-
+def get_disparite_per_house(df):
     houses = ['Ravenclaw', 'Slytherin', 'Gryffindor', 'Hufflepuff']
 
     data, features = get_numeric_data_by_house(df.data, df.features, houses)
@@ -60,6 +54,13 @@ if __name__ == "__main__":
     for feature in features:
         disparite_houses[feature] = np.std(means, axis=0)[i]
         i += 1
+    return disparite_houses
+
+if __name__ == "__main__":
+    file = sys.argv[1]
+    df = Data_treatment(file)
+    disparite_houses = get_disparite_per_house(df)
+
 
     print("disparite_houses : ")
     print(disparite_houses)
@@ -71,4 +72,4 @@ if __name__ == "__main__":
     plt.setp(plt.xticks()[1], rotation=90)
     plt.tight_layout()
     # plt.show()
-    plt.savefig("hystogram.png")
+    plt.savefig("histogram.png")
