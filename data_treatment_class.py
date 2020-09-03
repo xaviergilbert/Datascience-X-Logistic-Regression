@@ -18,8 +18,6 @@ class Data_treatment():
             features.append(column)
         return features
 
-    # data = np.array(data, dtype=np.float64)
-
     def get_numeric_data(self):
         data = self.data
         features = self.features
@@ -32,12 +30,12 @@ class Data_treatment():
             col += 1
         return data, features
 
-
     def get_clean_data(self, data):
-        # data = self.num_data
         for col in range(data.shape[1]):
             row = 0
             while row < data.shape[0]:
+                if not isinstance(data[row][col], float):
+                    print("La donnee n'est pas numerique: " + str(data[row][col]))
                 if np.isnan(data[row][col]):
                     data = np.delete(data, row, axis=0)
                     row -= 1
@@ -45,9 +43,7 @@ class Data_treatment():
         return data
 
     def get_normalize_data(self, data):
-        # data = np.array(data, dtype=np.float64)
-
-        # data = self.clean_data
+        
         def normalize(data, max, min):
             return (data - min) / (max - min) * 100
 
@@ -56,6 +52,4 @@ class Data_treatment():
             max = np.max(data[:, column])
             for row in range(data.shape[0]):
                 data[row][column] = normalize(data[row][column], max, min)
-            # print(features[column])
-            # print(data[:, column])
         return data
