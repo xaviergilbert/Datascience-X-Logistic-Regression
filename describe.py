@@ -23,34 +23,35 @@ from data_treatment_class import Data_treatment
 #             row += 1
 #     return data
 
-def count_func(summary, data):
+def count_func(summary, data, features):
     summary['count'] = {}
     for col in range(data.shape[1]):
-        summary['count']['Feature ' + str(col)] = data.shape[0]
+        summary['count'][features[col]] = data.shape[0]
     return summary
 
-def mean_func(summary, data):
+def mean_func(summary, data, features):
     summary['mean'] = {}
     for col in range(data.shape[1]):
         sum = 0
         for row in range(data.shape[0]):
             sum += data[row][col]
-        mean = sum / summary['count']['Feature ' + str(col)]
-        summary['mean']['Feature ' + str(col)] = mean
+        mean = sum / data.shape[0]
+        # summary['count'][features[col]]
+        summary['mean'][features[col]] = mean
     return summary
 
-def std_func(summary, data):
+def std_func(summary, data, features):
     summary['std'] = {}
     for col in range(data.shape[1]):
         sum = 0
         for row in range(data.shape[0]):
-            sum += abs(data[row][col] - summary['mean']['Feature ' + str(col)]) ** 2
+            sum += abs(data[row][col] - summary['mean'][features[col]]) ** 2
         res = sum / data.shape[0]
         std = np.sqrt(res)
-        summary['std']['Feature ' + str(col)] = std
+        summary['std'][features[col]] = std
     return summary
 
-def quartile_func(summary, data):
+def quartile_func(summary, data, features):
     summary['min'] = {}
     summary['25%'] = {}
     summary['50%'] = {}
@@ -59,11 +60,11 @@ def quartile_func(summary, data):
     for col in range(data.shape[1]):
         data_col = data[:, col]
         data_col = np.sort(data_col, 0)
-        summary['min']['Feature ' + str(col)] = data_col[0]
-        summary['25%']['Feature ' + str(col)] = data_col[int(data_col.shape[0] / 4)]
-        summary['50%']['Feature ' + str(col)] = data_col[int(data_col.shape[0] / 2)]
-        summary['75%']['Feature ' + str(col)] = data_col[int(data_col.shape[0] * 3 / 4)]
-        summary['max']['Feature ' + str(col)] = data_col[-1]
+        summary['min'][features[col]] = data_col[0]
+        summary['25%'][features[col]] = data_col[int(data_col.shape[0] / 4)]
+        summary['50%'][features[col]] = data_col[int(data_col.shape[0] / 2)]
+        summary['75%'][features[col]] = data_col[int(data_col.shape[0] * 3 / 4)]
+        summary['max'][features[col]] = data_col[-1]
     return summary
 
 def print_func(summary, features):
@@ -85,9 +86,9 @@ if __name__ == "__main__":
     df = Data_treatment(file)
 
     summary = {}
-    summary = count_func(summary, df.normalize_data)
-    summary = mean_func(summary, df.normalize_data)
-    summary = std_func(summary, df.normalize_data)
-    summary = quartile_func(summary, df.normalize_data)
+    summary = count_func(summary, df.normalize_data, df.features)
+    summary = mean_func(summary, df.normalize_data, df.features)
+    summary = std_func(summary, df.normalize_data, df.features)
+    summary = quartile_func(summary, df.normalize_data, df.features)
     print_func(summary, df.num_features)
     # print(summary)
