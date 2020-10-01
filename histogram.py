@@ -71,5 +71,4 @@ if __name__ == "__main__":
     plt.ylabel('Standard deviation \nregarding the mean of the houses')
     plt.setp(plt.xticks()[1], rotation=90)
     plt.tight_layout()
-    # plt.show()
     plt.savefig("histogram.png")

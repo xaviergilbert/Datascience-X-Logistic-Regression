@@ -9,7 +9,7 @@ class Data_treatment():
         self.features = self.get_features()
         self.num_data, self.num_features = self.get_numeric_data()
         self.clean_data = self.get_clean_data(self.num_data)
-        self.normalize_data = self.get_normalize_data(self.clean_data)
+        self.normalize_data = self.get_normalize_data(self.clean_data[:, 1:])
 
     def get_features(self):
         columns = self.data_brut.columns[1:]
@@ -21,17 +21,19 @@ class Data_treatment():
     def get_numeric_data(self):
         data = self.data
         features = self.features
-        col = 0
+        col = 1
         while col < data.shape[1]:
             if isinstance(data[0][col], str):
                 data = np.delete(data, col, 1)
                 del features[col]
                 col -= 1
             col += 1
-        return data, features
+        return data, features[1:]
 
     def get_clean_data(self, data):
         for col in range(data.shape[1]):
+            if col == 0:
+                continue
             row = 0
             while row < data.shape[0]:
                 if not isinstance(data[row][col], float):
@@ -43,7 +45,7 @@ class Data_treatment():
         return data
 
     def get_normalize_data(self, data):
-        
+
         def normalize(data, max, min):
             return (data - min) / (max - min) * 100
 

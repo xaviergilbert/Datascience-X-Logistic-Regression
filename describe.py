@@ -2,27 +2,6 @@ import sys
 import numpy as np
 from data_treatment_class import Data_treatment
 
-
-# def get_numeric_data(data, features):
-#     col = 0
-#     while col < data.shape[1]:
-#         if isinstance(data[0][col], str):
-#             data = np.delete(data, col, 1)
-#             del features[col]
-#             col -= 1
-#         col += 1
-#     return data, features
-
-# def clean_data(data):
-#     for col in range(data.shape[1]):
-#         row = 0
-#         while row < data.shape[0]:
-#             if np.isnan(data[row][col]):
-#                 data = np.delete(data, row, axis=0)
-#                 row -= 1
-#             row += 1
-#     return data
-
 def count_func(summary, data, features):
     summary['count'] = {}
     for col in range(data.shape[1]):
