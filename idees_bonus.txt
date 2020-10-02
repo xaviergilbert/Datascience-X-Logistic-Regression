@@ -1,5 +1,0 @@
-describe.py
-    - mettre la normalisation des donnees en options
-    - rajouter des indicateurs pertinent (std entre maisons)
-
-
