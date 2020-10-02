@@ -14,6 +14,8 @@ La mise en graphiques nous permet ensuite d'avoir une idee "visuelle" de nos don
 L'entrainement de nos donnees nous permet ensuite de predire dans quelle maison de poudlard un eleve devrait se retrouver.
 
 ## Usage
+source my_env/bin/activate pour avoir le bon environnement de travail
+
 python describe.py dataset_train.csv
 
 python histogram.py dataset_train.csv
