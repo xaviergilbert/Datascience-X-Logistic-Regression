@@ -3,9 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from data_treatment_class import Data_treatment
 
-
-# from describe import get_numeric_data, clean_data
-
 def get_numeric_data_by_house(datas, houses):
     min_max = []
     col = 1
@@ -32,9 +29,9 @@ def get_numeric_data_by_house(datas, houses):
 def get_disparite_per_house(df):
     houses = ['Ravenclaw', 'Slytherin', 'Gryffindor', 'Hufflepuff']
     data, min_max = get_numeric_data_by_house(df.data, houses)
-    features = df.features
+    features = df.features[1:]
     for house in houses:
-        # On clean les donnees 
+        # On clean les donnees
         data[house] = df.get_clean_data(data[house])
         # On normalise les donnees
         for column in range(data[house].shape[1]):
@@ -62,8 +59,8 @@ if __name__ == "__main__":
     disparite_houses = get_disparite_per_house(df)
 
 
-    print("disparite_houses : ")
-    print(disparite_houses)
+    # print("disparite_houses : ")
+    # print(disparite_houses)
 
     plt.bar(list(disparite_houses.keys()), disparite_houses.values(), color='g')
     plt.title('Difference in treatment regarding the house \nin the different Hogwards courses')

@@ -1,3 +1,4 @@
+
 import sys
 import pandas as pd
 import seaborn as sns
@@ -11,7 +12,9 @@ if __name__ == "__main__":
     file = sys.argv[1]
     df = Data_treatment(file)
     df.data_brut = df.data_brut.drop(['Index', 'First Name', 'Last Name', 'Best Hand', ], axis=1)
+    print("ici")
     sns.pairplot(df.data_brut, hue="Hogwarts House")
+    print("ici")
     plt.tight_layout()
 
     plt.savefig("pair_plot.png")

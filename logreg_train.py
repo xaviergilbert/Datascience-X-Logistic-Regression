@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 import numpy as np
 import copy
 from data_treatment_class import Data_treatment
