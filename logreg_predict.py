@@ -1,6 +1,9 @@
+#!/usr/bin/env python 
+
 import os
 import sys
 import csv
+import argparse
 import numpy as np
 from data_treatment_class import Data_treatment
 
@@ -24,8 +27,16 @@ def predict(X, thetas):
     return Y_pred
 
 def main():
-    file = sys.argv[1]
-    df = Data_treatment(file)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file", help="csv datas file")
+    args = parser.parse_args()
+    file_name = args.file
+
+    try:
+        df = Data_treatment(file_name)
+    except Exception as e:
+        print("Error", e)
+        exit()
 
     X = df.normalize_data[:, 1:]
     Y = df.clean_data[:, :1]
