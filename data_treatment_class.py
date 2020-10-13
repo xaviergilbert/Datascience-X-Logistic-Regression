@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import copy
 
 class Data_treatment():
     def __init__(self, file_name):
@@ -29,9 +30,9 @@ class Data_treatment():
             col += 1
         return data, features[1:]
 
-    def get_clean_data(self, data):
+    def get_clean_data(self, data, skip_first_col=1):
         for col in range(data.shape[1]):
-            if col == 0:
+            if skip_first_col and col == 0:
                 continue
             row = 0
             while row < data.shape[0]:
@@ -44,7 +45,7 @@ class Data_treatment():
         return data
 
     def get_normalize_data(self, data):
-
+        data = copy.copy(data)
         def normalize(data, max, min):
             return (data - min) / (max - min) * 100
 

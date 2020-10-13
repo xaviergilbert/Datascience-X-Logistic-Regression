@@ -12,16 +12,6 @@ def sigmoid_(x):
     return 1 / (1 + np.exp(-x))
 
 def predict(X, thetas):
-    """
-        Predict class labels for samples in x_train.
-        Arg:
-            x_train: a 1d or 2d numpy ndarray for the samples
-        Returns:
-            y_pred, the predicted class label per sample.
-            None on any error.
-        Raises:
-            This method should not raise any Exception.
-    """
     tmp = np.dot(X, thetas[1:]) + thetas[:1]
     Y_pred = np.array(sigmoid_(tmp))
     return Y_pred
@@ -29,6 +19,9 @@ def predict(X, thetas):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("file", help="csv datas file")
+    parser.add_argument("-a", "--accuracy", \
+        help="Allow to split the dataset_train to get accuracy", \
+        action="store_true")
     args = parser.parse_args()
     file_name = args.file
 
@@ -40,6 +33,15 @@ def main():
 
     X = df.normalize_data[:, 1:]
     Y = df.clean_data[:, :1]
+
+    #pour pouvoir calculer un accuracy correcte
+    if args.accuracy:
+        perc = ""
+        while not perc.isdigit():
+            perc = input("How much of the dataset did you use for the training ? (%) : ")
+        perc = int(perc) if int(perc) < 100 else 99
+        X = X[int(len(Y) * perc / 100):, :]
+        Y = Y[int(len(Y) * perc / 100):, :]
 
     if os.path.exists("thetas.txt"):
         f = open("thetas.txt", "r")

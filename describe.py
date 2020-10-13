@@ -1,4 +1,5 @@
 import sys
+import argparse
 import numpy as np
 from data_treatment_class import Data_treatment
 
@@ -61,13 +62,28 @@ def print_func(summary, features):
         print("")
 
 if __name__ == "__main__":
-    file = sys.argv[1]
-    df = Data_treatment(file)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file", help="csv datas file")
+    parser.add_argument("-n", "--normalize", 
+        help="Show normalized data", 
+        action="store_true")
+    args = parser.parse_args()
+    file_name = args.file
+
+    try:
+        df = Data_treatment(file_name)
+    except Exception as e:
+        print("Error", e)
+        exit()
+
+    if args.normalize:
+        data = df.normalize_data
+    else:
+        data = df.clean_data[:, 1:]
 
     summary = {}
-    summary = count_func(summary, df.normalize_data, df.features)
-    summary = mean_func(summary, df.normalize_data, df.features)
-    summary = std_func(summary, df.normalize_data, df.features)
-    summary = quartile_func(summary, df.normalize_data, df.features)
+    summary = count_func(summary, data, df.num_features)
+    summary = mean_func(summary, data, df.num_features)
+    summary = std_func(summary, data, df.num_features)
+    summary = quartile_func(summary, data, df.num_features)
     print_func(summary, df.num_features)
-    # print(summary)

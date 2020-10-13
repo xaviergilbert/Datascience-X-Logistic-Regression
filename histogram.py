@@ -1,4 +1,5 @@
 import sys
+import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from data_treatment_class import Data_treatment
@@ -32,7 +33,7 @@ def get_disparite_per_house(df):
     features = df.features[1:]
     for house in houses:
         # On clean les donnees
-        data[house] = df.get_clean_data(data[house])
+        data[house] = df.get_clean_data(data[house], 0)
         # On normalise les donnees
         for column in range(data[house].shape[1]):
             min = min_max[column][0]
@@ -54,8 +55,17 @@ def get_disparite_per_house(df):
     return disparite_houses
 
 if __name__ == "__main__":
-    file = sys.argv[1]
-    df = Data_treatment(file)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file", help="csv datas file")
+    args = parser.parse_args()
+    file_name = args.file
+
+    try:
+        df = Data_treatment(file_name)
+    except Exception as e:
+        print("Error", e)
+        exit()
+        
     disparite_houses = get_disparite_per_house(df)
 
 

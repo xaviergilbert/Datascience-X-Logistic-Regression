@@ -38,32 +38,11 @@ class Data_train:
         return 1 / (1 + np.exp(-x))
 
     def predict(self, X):
-        """
-            Predict class labels for samples in x_train.
-            Arg:
-                x_train: a 1d or 2d numpy ndarray for the samples
-            Returns:
-                y_pred, the predicted class label per sample.
-                None on any error.
-            Raises:
-                This method should not raise any Exception.
-        """
         tmp = np.dot(X, self.thetas[1:]) + self.thetas[:1]
         Y_pred = np.array(self.sigmoid_(tmp))
         return Y_pred
 
     def fit(self, X, Y):
-        """
-            Fit the model according to the given training data.
-            Args:
-                X: a 1d or 2d numpy ndarray for the samples
-                Y: a scalar or a numpy ndarray for the correct labels
-            Returns:
-                self : object
-                None on any error.
-            Raises:
-                This method should not raise any Exception.
-        """
         self.thetas = np.zeros(X.shape[1] + 1)
         for i in range(self.max_iter):
             Y_pred = self.predict(X)
@@ -75,6 +54,9 @@ class Data_train:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("file", help="csv datas file")
+    parser.add_argument("-a", "--accuracy", 
+        help="Allow to split the dataset_train to get accuracy", 
+        action="store_true")
     args = parser.parse_args()
     file_name = args.file
 
@@ -83,8 +65,18 @@ def main():
     except Exception as e:
         print("Error", e)
         exit()
+
     X = df.normalize_data[:, 1:]
     Y = df.clean_data[:, :1]
+
+    #pour pouvoir calculer un accuracy correcte
+    if args.accuracy:
+        perc = ""
+        while not perc.isdigit():
+            perc = input("How much of the dataset do you want to use for the training ? (%) : ")
+        perc = int(perc) if int(perc) < 100 else 99
+        X = X[:int(len(Y) * perc / 100), :]
+        Y = Y[:int(len(Y) * perc / 100), :]
 
     if os.path.exists("thetas.txt"):
         os.remove("thetas.txt")
